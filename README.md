@@ -25,4 +25,4 @@ Projeto para avaliação técnica da Vaga para Desenvolvedor Web Júnior
 - bem como sua capacidade de utilizar as tecnologias propostas.
 - faça um fork desse projeto
 - crie uma branch development e depois de terminar o desenvolvimento faça o merge com a main
-- depois envie o link do respositorio para webflix.tecnologia@gmail.com
+- depois envie o link do respositorio para vagastmatheaco@gmail.com
