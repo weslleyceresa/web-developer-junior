@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('/blog', 'BlogController::index');
+$routes->get('/blog/load-more', 'BlogController::loadMore');
 $routes->get('/login', 'AuthController::login');
 $routes->post('/do-login', 'AuthController::doLogin');
 $routes->get('/logout', 'AuthController::logout');

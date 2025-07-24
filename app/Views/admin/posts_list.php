@@ -1,4 +1,4 @@
-<?= $this->extend('partials/layout') ?>
+<?= $this->extend('partials/layout_private') ?>
 <?= $this->section('content') ?>
 
 <div class="container mt-5">

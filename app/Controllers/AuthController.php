@@ -33,14 +33,20 @@ class AuthController extends BaseController
         // Atualiza último login
         $userModel->update($user['id'], ['last_login' => date('Y-m-d H:i:s')]);
 
-        // Inicia sessão
+        // Após autenticar e salvar dados na sessão
         session()->set([
             'user_id' => $user['id'],
             'username' => $user['username'],
+            'user_name' => $user['name'],
             'role' => $user['role']
         ]);
 
-        return redirect()->to('/admin/posts');
+        // Redirecionamento com base na role
+        if ($user['role'] === 'admin') {
+            return redirect()->to('/admin/posts');
+        }
+
+        return redirect()->to('/blog');
     }
 
     /**
