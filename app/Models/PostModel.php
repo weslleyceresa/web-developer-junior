@@ -9,13 +9,17 @@ class PostModel extends Model
     protected $table      = 'posts';
     protected $primaryKey = 'id';
 
+    // Campos permitidos para escrita
     protected $allowedFields = [
-        'title',
-        'slug',
-        'image_path',
-        'html_content',
-        'created_at',
-        'updated_at'
+        'title',         // Título do post
+        'slug',          // URL amigável
+        'image_path',    // Caminho da imagem (opcional)
+        'html_content',  // Conteúdo HTML completo
+        'excerpt',       // Resumo opcional do post
+        'author_id',     // ID do autor (usuário)
+        'status',        // Status do post (draft, published, archived)
+        'created_at',    // Data de criação (automático)
+        'updated_at'     // Data de atualização (automático)
     ];
 
     protected $useTimestamps = true;
@@ -24,11 +28,14 @@ class PostModel extends Model
 
     protected $returnType = 'array';
 
+    // Regras de validação
     protected $validationRules = [
         'title'        => 'required|min_length[3]|max_length[255]',
-        'slug'         => 'required|is_unique[posts.slug,id,{id}]', // Permite atualizar sem erro no slug próprio
+        'slug'         => 'required|is_unique[posts.slug,id,{id}]',
         'html_content' => 'required|min_length[20]',
-        'image_path'   => 'permit_empty|max_length[255]'
+        'image_path'   => 'permit_empty|max_length[255]',
+        'status'       => 'permit_empty|in_list[draft,published,archived]',
+        'author_id'    => 'required|integer',
     ];
 
     protected $validationMessages = [
@@ -36,27 +43,25 @@ class PostModel extends Model
             'required' => 'O título é obrigatório.',
         ],
         'slug' => [
-            'required' => 'O slug é obrigatório.',
-            'is_unique' => 'Este slug já está em uso.'
+            'required'   => 'O slug é obrigatório.',
+            'is_unique'  => 'Este slug já está em uso.',
         ],
         'html_content' => [
             'required' => 'O conteúdo é obrigatório.',
         ],
         'image_path' => [
-            'max_length' => 'O caminho da imagem deve ter no máximo 255 caracteres.'
-        ],
+            'max_length' => 'O caminho da imagem deve ter no máximo 255 caracteres.',
+        ]
     ];
 
     protected $beforeInsert = ['generateSlug'];
     protected $beforeUpdate = ['generateSlug'];
 
+    // Gera automaticamente o slug se não for enviado
     protected function generateSlug(array $data)
     {
-        if (isset($data['data']['title'])) {
-            // Gera slug a partir do título, se slug não for enviado ou estiver vazio
-            if (empty($data['data']['slug'])) {
-                $data['data']['slug'] = url_title($data['data']['title'], '-', true);
-            }
+        if (isset($data['data']['title']) && empty($data['data']['slug'])) {
+            $data['data']['slug'] = url_title($data['data']['title'], '-', true);
         }
         return $data;
     }

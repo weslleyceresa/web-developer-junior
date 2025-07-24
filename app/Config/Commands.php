@@ -12,5 +12,6 @@ class Commands extends BaseConfig
      */
     public $commands = [
         'db:createTables' => \App\Commands\CreateTables::class,
+        'db:updateTables' => \App\Commands\UpdateTables::class,
     ];
 }

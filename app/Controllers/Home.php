@@ -2,10 +2,27 @@
 
 namespace App\Controllers;
 
-class Home extends BaseController
+use CodeIgniter\Controller;
+use App\Models\UserModel;
+
+class Home extends Controller
 {
-    public function index(): string
+    public function index()
     {
-        return view('welcome_message');
+        $session = session();
+        $userId = $session->get('user_id');
+
+        if ($userId) {
+            $userModel = new UserModel();
+            $user = $userModel->find($userId);
+
+            if ($user && $user['role'] === 'admin') {
+                return redirect()->to('/admin/posts');
+            } else {
+                return redirect()->to('/blog');
+            }
+        }
+
+        return view('home');
     }
 }
