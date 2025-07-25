@@ -5,6 +5,7 @@ services:
       dockerfile: .docker/Dockerfile
     volumes:
       - .:/var/www/html
+      - uploads_data:/var/www/html/public/uploads
     ports:
       - "8080:80"
     depends_on:
@@ -32,3 +33,4 @@ services:
 
 volumes:
   db_data:
+  uploads_data:

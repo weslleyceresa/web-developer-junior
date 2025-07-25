@@ -13,4 +13,5 @@ COPY . /var/www/html
 
 WORKDIR /var/www/html
 
+# Apenas garante que o container tenha propriedade do diretório de trabalho
 RUN chown -R www-data:www-data /var/www/html

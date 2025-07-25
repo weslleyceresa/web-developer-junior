@@ -18,6 +18,11 @@ $routes->post('/blog/save-draft', 'BlogController::saveDraft');
 $routes->post('/blog/create', 'PostsController::store');
 $routes->get('/blog/(:segment)', 'BlogController::show/$1');
 
+$routes->get('/user/profile', 'UserController::profile');
+$routes->get('/user/edit', 'UserController::edit');
+$routes->post('/user/update', 'UserController::update');
+$routes->get('/user/(:segment)', 'UserController::publicProfile/$1');
+
 $routes->group('admin', function ($routes) {
     $routes->get('posts', 'PostsController::index');
     $routes->get('posts/new', 'PostsController::new');

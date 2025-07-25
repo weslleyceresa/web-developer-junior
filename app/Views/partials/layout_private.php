@@ -68,7 +68,9 @@
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <span class="nav-link">Olá, <?= esc(session()->get('user_name')) ?></span>
+            <a href="/user/profile" class="nav-link">
+              <?= esc(session()->get('user_name')) ?>
+            </a>
           </li>
           <li class="nav-item">
             <a href="/logout" class="nav-link">Sair</a>

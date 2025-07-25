@@ -20,7 +20,9 @@ class UserModel extends Model
         'updated_at',      // Timestamp de atualização (auto)
         'last_login',      // Último login
         'status',          // active, inactive, banned
-        'role'             // admin, editor, user
+        'role',            // admin, editor, user
+        'bio',             // biografia do usuario caso ele desejar
+        'avatar_path'      // imagem de perfil do user, seu avatar de exibição  
     ];
 
     protected $useTimestamps = true;
