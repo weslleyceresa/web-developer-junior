@@ -53,4 +53,14 @@ class PostModel extends Model
             'max_length' => 'O caminho da imagem deve ter no máximo 255 caracteres.',
         ]
     ];
+
+
+    public function getPaginatedWithAuthors(int $limit, int $offset = 0)
+    {
+        return $this->select('posts.*, users.name as author_name')
+            ->join('users', 'users.id = posts.author_id')
+            ->where('posts.status', 'published')
+            ->orderBy('posts.created_at', 'DESC')
+            ->findAll($limit, $offset);
+    }
 }

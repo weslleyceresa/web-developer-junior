@@ -7,6 +7,11 @@ use CodeIgniter\Controller;
 
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+        // Carregar o helper 'text' para ter acesso à função character_limiter()
+        helper('text');
+    }
 
     public function create()
     {
@@ -15,7 +20,12 @@ class BlogController extends Controller
 
     public function index()
     {
-        return view('blog/index');
+        $postModel = new \App\Models\PostModel();
+
+        // Carrega os primeiros posts (5 mais recentes)
+        $initialPosts = $postModel->getPaginatedWithAuthors(5, 0);
+
+        return view('blog/index', ['initialPosts' => $initialPosts]);
     }
 
     public function loadMore()
@@ -24,11 +34,8 @@ class BlogController extends Controller
         $perPage = 5;
         $offset = ($page - 1) * $perPage;
 
-        $postModel = new PostModel();
-        $posts = $postModel
-            ->where('status', 'published')
-            ->orderBy('created_at', 'DESC')
-            ->findAll($perPage, $offset);
+        $postModel = new \App\Models\PostModel();
+        $posts = $postModel->getPaginatedWithAuthors($perPage, $offset);
 
         return view('blog/_posts', ['posts' => $posts]);
     }

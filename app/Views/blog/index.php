@@ -42,7 +42,10 @@
             </div>
 
             <div id="blogFeed">
-                <div id="postsContainer"></div>
+                <div id="postsContainer">
+                    <!-- Posts iniciais carregados diretamente do controller -->
+                    <?= view('blog/_posts', ['posts' => $initialPosts]) ?>
+                </div>
                 <div id="loading" class="text-center my-4 d-none">
                     <div class="spinner-border text-primary" role="status"></div>
                 </div>
@@ -68,9 +71,9 @@
 
 <!-- Scroll infinito -->
 <script>
-    let page = 1;
+    let page = <?= !empty($initialPosts) ? 2 : 1 ?>; // Começa na página 2 se houver posts iniciais
     let loading = false;
-    let allLoaded = false;
+    let allLoaded = <?= empty($initialPosts) ? 'true' : 'false' ?>;
 
     function loadPosts() {
         if (loading || allLoaded) return;
@@ -85,14 +88,19 @@
                 $('#postsContainer').append(data);
                 page++;
             }
-        }).always(() => {
+        }).fail(function() {
+            console.error('Erro ao carregar posts');
+        }).always(function() {
             $('#loading').addClass('d-none');
             loading = false;
         });
     }
 
     $(document).ready(function() {
-        loadPosts();
+        // Se não há posts iniciais, carrega a primeira página
+        if (page === 1) {
+            loadPosts();
+        }
 
         $(window).scroll(function() {
             if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300) {
