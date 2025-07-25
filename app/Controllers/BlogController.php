@@ -56,4 +56,20 @@ class BlogController extends Controller
 
         return view('blog/detail', ['post' => $post]);
     }
+
+    public function search()
+    {
+        $query = $this->request->getGet('q');
+        $postModel = new \App\Models\PostModel();
+
+        $results = [];
+        if (!empty($query)) {
+            $results = $postModel->searchPosts($query);
+        }
+
+        return view('blog/index', [
+            'initialPosts' => $results,
+            'searchQuery' => $query
+        ]);
+    }
 }

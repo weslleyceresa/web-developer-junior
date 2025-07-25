@@ -63,4 +63,18 @@ class PostModel extends Model
             ->orderBy('posts.created_at', 'DESC')
             ->findAll($limit, $offset);
     }
+
+    public function searchPosts(string $query)
+    {
+        return $this->select('posts.*, users.name as author_name')
+            ->join('users', 'users.id = posts.author_id')
+            ->where('posts.status', 'published')
+            ->groupStart()
+            ->like('posts.title', $query)
+            ->orLike('posts.html_content', $query)
+            ->orLike('users.name', $query)
+            ->groupEnd()
+            ->orderBy('posts.created_at', 'DESC')
+            ->findAll();
+    }
 }

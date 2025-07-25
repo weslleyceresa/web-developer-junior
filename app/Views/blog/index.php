@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <!-- Coluna lateral esquerda: Perfil e rascunhos -->
+        <!-- Coluna lateral esquerda: Perfil, botão de escrever e rascunhos -->
         <div class="col-md-3 d-none d-md-block">
             <div class="card mb-3 text-center">
                 <div class="card-body">
@@ -18,6 +18,15 @@
                     </h5>
                     <p class="text-muted">@<?= esc(session()->get('username')) ?></p>
                     <p class="small text-muted">Bem-vindo ao Blog PME!</p>
+                </div>
+            </div>
+
+            <!-- Botão de escrever publicação na lateral -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <button class="btn btn-primary w-100" onclick="window.location.href='/blog/create'">
+                        <i class="bi bi-pencil-square me-2"></i>Escrever uma publicação
+                    </button>
                 </div>
             </div>
 
@@ -39,13 +48,21 @@
             <?php endif; ?>
         </div>
 
-        <!-- Coluna central: Feed e conteúdo dinâmico -->
+        <!-- Coluna central: Busca, conteúdo dinâmico e feed -->
         <div class="col-md-6">
+            <!-- Formulário de busca no topo da coluna central -->
             <div class="card mb-4 shadow-sm">
-                <div class="card-body text-center">
-                    <button class="btn btn-primary" onclick="window.location.href='/blog/create'">
-                        Escrever uma publicação
-                    </button>
+                <div class="card-body">
+                    <form action="<?= base_url('blog/search') ?>" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q"
+                                placeholder="Buscar publicações..."
+                                value="<?= esc($searchQuery ?? '') ?>">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -53,6 +70,13 @@
             <div id="dynamicContent"></div>
 
             <div id="blogFeed">
+                <!-- Mensagem de busca -->
+                <?php if (!empty($searchQuery)): ?>
+                    <div class="alert alert-light mb-4">
+                        Resultados para: <strong><?= esc($searchQuery) ?></strong>
+                    </div>
+                <?php endif; ?>
+                
                 <div id="postsContainer">
                     <?= view('blog/_posts', ['posts' => $initialPosts]) ?>
                 </div>
@@ -84,8 +108,14 @@
     let page = <?= !empty($initialPosts) ? 2 : 1 ?>;
     let loading = false;
     let allLoaded = <?= empty($initialPosts) ? 'true' : 'false' ?>;
+    let isSearch = <?= !empty($searchQuery) ? 'true' : 'false' ?>; // Verifica se estamos em uma busca
 
     function loadPosts() {
+        // Se estivermos em uma busca, não carregamos mais posts via scroll
+        if (isSearch) {
+            return;
+        }
+
         if (loading || allLoaded) return;
         loading = true;
         $('#loading').removeClass('d-none');
@@ -107,12 +137,25 @@
     }
 
     $(document).ready(function() {
-        if (page === 1) loadPosts();
+        // Se não for uma busca, ativamos o scroll infinito
+        if (!isSearch && page === 1) {
+            loadPosts();
+        }
 
-        $(window).scroll(function() {
-            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300) {
-                loadPosts();
-            }
+        // Só configuramos o scroll se não for uma busca
+        if (!isSearch) {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300) {
+                    loadPosts();
+                }
+            });
+        }
+
+        // Adiciona o spinner no botão de busca ao submeter o formulário
+        $('form[action="<?= base_url('blog/search') ?>"]').submit(function() {
+            const button = $(this).find('button[type="submit"]');
+            button.prop('disabled', true);
+            button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...');
         });
     });
 
