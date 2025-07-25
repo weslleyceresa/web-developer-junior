@@ -39,4 +39,21 @@ class BlogController extends Controller
 
         return view('blog/_posts', ['posts' => $posts]);
     }
+
+    public function show($slug)
+    {
+        $postModel = new \App\Models\PostModel();
+        $post = $postModel
+            ->select('posts.*, users.name as author_name')
+            ->join('users', 'users.id = posts.author_id')
+            ->where('posts.slug', $slug)
+            ->where('posts.status', 'published')
+            ->first();
+
+        if (!$post) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Post não encontrado");
+        }
+
+        return view('blog/detail', ['post' => $post]);
+    }
 }

@@ -6,16 +6,19 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+
+$routes->get('/login', 'AuthController::login');
+$routes->post('/do-login', 'AuthController::doLogin');
+$routes->get('/logout', 'AuthController::logout');
+
 $routes->get('/blog', 'BlogController::index');
 $routes->get('/blog/load-more', 'BlogController::loadMore');
 $routes->get('/blog/create', 'BlogController::create');
 $routes->post('/blog/save-draft', 'BlogController::saveDraft');
 $routes->post('/blog/create', 'PostsController::store');
-$routes->get('/login', 'AuthController::login');
-$routes->post('/do-login', 'AuthController::doLogin');
-$routes->get('/logout', 'AuthController::logout');
+$routes->get('/blog/(:segment)', 'BlogController::show/$1');
 
-$routes->group('admin', function($routes) {
+$routes->group('admin', function ($routes) {
     $routes->get('posts', 'PostsController::index');
     $routes->get('posts/new', 'PostsController::new');
     $routes->post('posts/create', 'PostsController::store');
