@@ -45,6 +45,11 @@ class UserController extends BaseController
         if (!$userModel->insert($userData)) {
             return redirect()->back()->withInput()->with('errors', $userModel->errors());
         }
+        
+        // Atualiza avatar na sessão se foi modificado
+        if (isset($data['avatar_path'])) {
+            session()->set('avatar_path', $data['avatar_path']);
+        }
 
         return redirect()->to('/login')->with('success', 'Cadastro realizado com sucesso. Faça login!');
     }

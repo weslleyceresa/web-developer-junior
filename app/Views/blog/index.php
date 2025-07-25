@@ -7,7 +7,15 @@
         <div class="col-md-3 d-none d-md-block">
             <div class="card mb-3 text-center">
                 <div class="card-body">
-                    <h5><?= esc(session()->get('user_name')) ?></h5>
+                    <a href="/user/profile">
+                        <img src="<?= base_url(session()->get('avatar_path') ?: 'uploads/avatars/default-avatar.png') ?>"
+                            class="avatar avatar-md mb-2" alt="Avatar do usuário">
+                    </a>
+                    <h5>
+                        <a href="/user/profile" class="text-decoration-none text-dark">
+                            <?= esc(session()->get('user_name')) ?>
+                        </a>
+                    </h5>
                     <p class="text-muted">@<?= esc(session()->get('username')) ?></p>
                     <p class="small text-muted">Bem-vindo ao Blog PME!</p>
                 </div>
@@ -31,7 +39,7 @@
             <?php endif; ?>
         </div>
 
-        <!-- Coluna central: Feed e botão de postagem -->
+        <!-- Coluna central: Feed e conteúdo dinâmico -->
         <div class="col-md-6">
             <div class="card mb-4 shadow-sm">
                 <div class="card-body text-center">
@@ -41,9 +49,11 @@
                 </div>
             </div>
 
+            <!-- Conteúdo dinâmico (mapa, dicas etc.) -->
+            <div id="dynamicContent"></div>
+
             <div id="blogFeed">
                 <div id="postsContainer">
-                    <!-- Posts iniciais carregados diretamente do controller -->
                     <?= view('blog/_posts', ['posts' => $initialPosts]) ?>
                 </div>
                 <div id="loading" class="text-center my-4 d-none">
@@ -59,9 +69,9 @@
                 <div class="card-body">
                     <h6 class="card-title">Suas Preferências</h6>
                     <ul class="list-unstyled small text-muted">
-                        <li>📰 Assuntos empresariais</li>
-                        <li>📊 Dicas de gestão</li>
-                        <li>📍 Presidente Prudente</li>
+                        <li><button class="btn btn-link p-0" onclick="showContent('business')">📰 Assuntos empresariais</button></li>
+                        <li><button class="btn btn-link p-0" onclick="showContent('management')">📊 Dicas de gestão</button></li>
+                        <li><button class="btn btn-link p-0" onclick="showContent('presidente')">📍 Presidente Prudente</button></li>
                     </ul>
                 </div>
             </div>
@@ -69,9 +79,9 @@
     </div>
 </div>
 
-<!-- Scroll infinito -->
+<!-- Scroll infinito + conteúdo dinâmico -->
 <script>
-    let page = <?= !empty($initialPosts) ? 2 : 1 ?>; // Começa na página 2 se houver posts iniciais
+    let page = <?= !empty($initialPosts) ? 2 : 1 ?>;
     let loading = false;
     let allLoaded = <?= empty($initialPosts) ? 'true' : 'false' ?>;
 
@@ -97,10 +107,7 @@
     }
 
     $(document).ready(function() {
-        // Se não há posts iniciais, carrega a primeira página
-        if (page === 1) {
-            loadPosts();
-        }
+        if (page === 1) loadPosts();
 
         $(window).scroll(function() {
             if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300) {
@@ -108,6 +115,67 @@
             }
         });
     });
+
+    // Conteúdo dinâmico ao clicar nas preferências
+    function showContent(type) {
+        const contentDiv = $('#dynamicContent');
+        contentDiv.empty().show(); // Garante que a div está visível
+
+        let content = `
+        <div class="d-flex justify-content-end mb-2">
+            <button class="btn btn-sm btn-outline-secondary" onclick="hideContent()">❌ Fechar conteúdo</button>
+        </div>
+    `;
+
+        if (type === 'business') {
+            content += `
+            <div class="card">
+                <div class="card-body">
+                    <h5>Assuntos Empresariais</h5>
+                    <p>Fique por dentro de temas como empreendedorismo, economia, inovação e estratégias para pequenas e médias empresas.</p>
+                </div>
+            </div>
+        `;
+        } else if (type === 'management') {
+            content += `
+            <div class="card">
+                <div class="card-body">
+                    <h5>Dicas de Gestão</h5>
+                    <ul>
+                        <li>✅ Defina metas claras e mensuráveis.</li>
+                        <li>📈 Acompanhe indicadores de desempenho.</li>
+                        <li>👥 Valorize a comunicação com a equipe.</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        } else if (type === 'presidente') {
+            content += `
+            <div class="card">
+                <div class="card-body">
+                    <h5>Presidente Prudente - Localização</h5>
+                    <div style="width: 100%; height: 300px;">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3674.556734356483!2d-51.393308184411175!3d-22.1211000451817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x949a5b8e9f4b48af%3A0x25f3c1309aebd380!2sPresidente%20Prudente%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1689793024000!5m2!1spt-BR!2sbr" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        `;
+        }
+
+        contentDiv.html(content);
+    }
+
+    function hideContent() {
+        $('#dynamicContent').fadeOut().empty();
+    }
 </script>
 
 <?= $this->endSection() ?>

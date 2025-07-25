@@ -38,7 +38,8 @@ class AuthController extends BaseController
             'user_id' => $user['id'],
             'username' => $user['username'],
             'user_name' => $user['name'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            'avatar_path' => $user['avatar_path'],
         ]);
 
         // Redirecionamento com base na role

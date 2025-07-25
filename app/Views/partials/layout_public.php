@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <title><?= esc($title ?? 'Blog PME') ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
       background-color: #fff;
@@ -57,24 +59,26 @@
     }
   </style>
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand" href="/">Blog PME</a>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">Blog PME</a>
+    </div>
+  </nav>
 
-<main>
-  <?= $this->renderSection('content') ?>
-</main>
+  <main>
+    <?= $this->renderSection('content') ?>
+  </main>
 
-<footer>
-  <div class="container">
-    <small>&copy; <?= date('Y') ?> Blog PME - Presidente Prudente</small>
-  </div>
-</footer>
+  <footer>
+    <div class="container">
+      <small>&copy; <?= date('Y') ?> Blog PME - Presidente Prudente</small>
+    </div>
+  </footer>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
