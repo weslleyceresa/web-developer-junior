@@ -53,18 +53,4 @@ class PostModel extends Model
             'max_length' => 'O caminho da imagem deve ter no máximo 255 caracteres.',
         ]
     ];
-
-    protected $beforeInsert = ['generateSlug'];
-    protected $beforeUpdate = ['generateSlug'];
-
-    // Gera automaticamente o slug se não for enviado
-    protected function generateSlug(array $data)
-    {
-        if (!isset($data['data']['slug']) || empty($data['data']['slug'])) {
-            if (isset($data['data']['title'])) {
-                $data['data']['slug'] = url_title($data['data']['title'], '-', true);
-            }
-        }
-        return $data;
-    }
 }
