@@ -6,17 +6,11 @@ use App\Models\UserModel;
 
 class UserController extends BaseController
 {
-    /**
-     * Exibe o formulário de cadastro.
-     */
     public function registerForm()
     {
         return view('auth/register');
     }
 
-    /**
-     * Processa o cadastro de um novo usuário.
-     */
     public function register()
     {
         $data = $this->request->getPost();
@@ -42,9 +36,10 @@ class UserController extends BaseController
             'email'         => $data['email'],
             'phone'         => $data['phone'],
             'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT),
-            'role'          => 'user', // padrão
+            'role'          => 'user',
             'status'        => 'active',
             'created_at'    => date('Y-m-d H:i:s'),
+            'avatar_path'   => 'uploads/avatars/default-avatar.png'
         ];
 
         if (!$userModel->insert($userData)) {
@@ -81,17 +76,55 @@ class UserController extends BaseController
     {
         $userId = session()->get('user_id');
         $userModel = new UserModel();
+        $currentUser = $userModel->find($userId);
 
         $data = $this->request->getPost();
-        $file = $this->request->getFile('avatar');
 
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = $file->getRandomName();
-            $file->move(ROOTPATH . 'public/uploads/avatars', $newName);
-            $data['avatar_path'] = '/uploads/avatars/' . $newName;
+        // Validação
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'name' => 'required|min_length[3]',
+            'username' => "required|min_length[3]|is_unique[users.username,id,{$userId}]",
+            'email' => "required|valid_email|is_unique[users.email,id,{$userId}]",
+        ]);
+
+        if (!$validation->run($data)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
-        $userModel->update($userId, $data);
+        // Upload do avatar
+        $file = $this->request->getFile('avatar');
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $uploadPath = FCPATH . 'uploads/avatars';
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+                file_put_contents($uploadPath . '/index.html', '');
+            }
+
+            $newName = $file->getRandomName();
+            if (!$file->move($uploadPath, $newName)) {
+                log_message('error', 'Falha ao mover avatar: ' . $file->getErrorString());
+            } else {
+                $data['avatar_path'] = 'uploads/avatars/' . $newName;
+
+                // Remove o avatar antigo se não for o padrão
+                if (
+                    !empty($currentUser['avatar_path']) &&
+                    $currentUser['avatar_path'] !== 'uploads/avatars/default-avatar.png'
+                ) {
+                    $oldAvatarPath = FCPATH . $currentUser['avatar_path'];
+                    if (file_exists($oldAvatarPath)) {
+                        unlink($oldAvatarPath);
+                    }
+                }
+            }
+        }
+
+        // Atualiza o usuário
+        if (!$userModel->update($userId, $data)) {
+            return redirect()->back()->withInput()->with('errors', $userModel->errors());
+        }
 
         return redirect()->to('/user/profile')->with('success', 'Perfil atualizado com sucesso!');
     }

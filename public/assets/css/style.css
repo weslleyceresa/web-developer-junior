@@ -1,0 +1,33 @@
+/* Avatar Styles */
+.avatar {
+  display: inline-block;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Tamanhos padrões */
+.avatar-xs {
+  width: 32px;
+  height: 32px;
+}
+
+.avatar-sm {
+  width: 64px;
+  height: 64px;
+}
+
+.avatar-md {
+  width: 96px;
+  height: 96px;
+}
+
+.avatar-lg {
+  width: 128px;
+  height: 128px;
+}
+
+.avatar-xl {
+  width: 160px;
+  height: 160px;
+}

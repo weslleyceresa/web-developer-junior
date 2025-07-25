@@ -6,9 +6,10 @@
     <h2>Meu Perfil</h2>
     <a href="/user/edit" class="btn btn-outline-primary">Editar Perfil</a>
   </div>
+
   <div class="card mb-4 p-4">
     <div class="d-flex align-items-center">
-      <img src="<?= esc($user['avatar_path'] ?? '/default-avatar.png') ?>" class="rounded-circle me-3" width="80" height="80">
+      <img src="<?= base_url($user['avatar_path'] ?: 'uploads/avatars/default-avatar.png') ?>" class="me-3 avatar avatar-md">
       <div>
         <h5><?= esc($user['name']) ?> <small class="text-muted">@<?= esc($user['username']) ?></small></h5>
         <p class="text-muted mb-0"><?= esc($user['bio']) ?></p>
@@ -17,6 +18,7 @@
   </div>
 
   <h4 class="mb-3">Minhas Postagens</h4>
+
   <?php if (empty($posts)): ?>
     <div class="alert alert-info">Você ainda não escreveu nenhuma postagem.</div>
   <?php else: ?>

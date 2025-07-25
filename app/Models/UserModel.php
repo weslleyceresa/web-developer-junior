@@ -31,12 +31,11 @@ class UserModel extends Model
 
     protected $returnType = 'array';
 
-    // Regras de validação
     protected $validationRules = [
         'name'          => 'required|min_length[3]|max_length[150]',
-        'username'      => 'required|min_length[3]|max_length[100]|is_unique[users.username,id,{id}]',
-        'email'         => 'required|valid_email|is_unique[users.email,id,{id}]',
-        'password_hash' => 'required|min_length[60]',
+        'username'      => 'required|min_length[3]|max_length[100]',
+        'email'         => 'required|valid_email',
+        'password_hash' => 'permit_empty|min_length[60]',
         'role'          => 'permit_empty|in_list[admin,editor,user]',
         'status'        => 'permit_empty|in_list[active,inactive,banned]',
     ];
@@ -49,7 +48,7 @@ class UserModel extends Model
             'is_unique' => 'Este e-mail já está em uso.'
         ],
         'name' => [
-            'required' => 'O nome é obrigatório.',
+            'required' => 'O nome é obrigatório.'
         ]
     ];
 }
