@@ -42,7 +42,7 @@
         // Correção 3: Adicionar CSRF no rascunho
         $.post('/blog/save-draft', {
             title: $('#postTitle').val(),
-            content: $('#postContent').val(),
+            html_content: $('#postContent').val(),
             <?= csrf_token() ?>: '<?= csrf_hash() ?>'
         }, function() {
             isDirty = false;

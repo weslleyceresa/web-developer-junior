@@ -11,21 +11,16 @@ class PostsController extends BaseController
 
     public function __construct()
     {
+        helper('url');
         $this->postModel = new PostModel();
     }
 
-    /**
-     * Lista todos os posts.
-     */
     public function index()
     {
         $posts = $this->postModel->findAll();
         return view('admin/posts_list', ['posts' => $posts]);
     }
 
-    /**
-     * Exibe formulário de novo post.
-     */
     public function new()
     {
         return view('admin/post_form', [
@@ -36,37 +31,43 @@ class PostsController extends BaseController
     }
 
     /**
-     * Salva novo post.
+     * Método unificado para criar posts (admin e usuários comuns)
      */
-    public function create()
+    public function store()
     {
-        $data = $this->request->getPost();
-
-        // Verifica se o usuário está logado
-        $userId = session()->get('user_id');
-        if (!$userId) {
+        if (!session()->get('user_id')) {
             return redirect()->to('/login');
         }
 
-        // Prepara os dados (sem slug — será gerado no model)
-        $insertData = [
-            'title'        => $data['title'] ?? '',
-            'html_content' => $data['html_content'] ?? '',
-            'status'       => 'published',
-            'author_id'    => $userId
+        $title = $this->request->getPost('title');
+        $htmlContent = $this->request->getPost('html_content');
+        $authorId = session()->get('user_id');
+
+        $slugBase = url_title($title, '-', true);
+        $slug = $this->generateUniqueSlug($slugBase);
+
+        $postData = [
+            'title'        => $title,
+            'slug'         => $slug,
+            'html_content' => $htmlContent,
+            'author_id'    => $authorId,
+            'status'       => 'published'
         ];
 
-        // Tenta salvar
-        if ($this->postModel->insert($insertData)) {
-            return redirect()->to('/blog')->with('success', 'Post criado com sucesso!');
+        $validation = \Config\Services::validation();
+        $validation->setRules((new PostModel())->getValidationRules());
+
+        if (!$validation->run($postData)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
-        return redirect()->back()->withInput()->with('errors', $this->postModel->errors());
+        if (!$this->postModel->insert($postData)) {
+            return redirect()->back()->withInput()->with('errors', $this->postModel->errors());
+        }
+
+        return redirect()->to('/blog')->with('success', 'Post criado com sucesso!');
     }
 
-    /**
-     * Exibe formulário de edição.
-     */
     public function edit($id)
     {
         $post = $this->postModel->find($id);
@@ -81,9 +82,6 @@ class PostsController extends BaseController
         ]);
     }
 
-    /**
-     * Atualiza um post existente.
-     */
     public function update($id)
     {
         $data = $this->request->getPost();
@@ -107,5 +105,18 @@ class PostsController extends BaseController
         $this->postModel->update($id, $updateData);
 
         return redirect()->to('/admin/posts')->with('success', 'Post atualizado com sucesso!');
+    }
+
+    private function generateUniqueSlug(string $slugBase): string
+    {
+        $slug = $slugBase;
+        $counter = 1;
+
+        while ($this->postModel->where('slug', $slug)->first()) {
+            $slug = $slugBase . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 }
