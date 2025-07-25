@@ -60,8 +60,10 @@ class PostModel extends Model
     // Gera automaticamente o slug se não for enviado
     protected function generateSlug(array $data)
     {
-        if (isset($data['data']['title']) && empty($data['data']['slug'])) {
-            $data['data']['slug'] = url_title($data['data']['title'], '-', true);
+        if (!isset($data['data']['slug']) || empty($data['data']['slug'])) {
+            if (isset($data['data']['title'])) {
+                $data['data']['slug'] = url_title($data['data']['title'], '-', true);
+            }
         }
         return $data;
     }

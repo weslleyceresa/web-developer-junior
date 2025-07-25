@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <title><?= esc($title ?? 'Blog PME') ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
     }
@@ -22,9 +24,13 @@
       flex: 1;
     }
 
+    .modal-backdrop {
+      opacity: 0.7 !important;
+    }
+
     .navbar {
       background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .navbar-brand {
@@ -53,6 +59,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar navbar-expand-lg mb-4">
@@ -84,4 +91,5 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

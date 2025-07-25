@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Admin;
+namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\PostModel;
@@ -42,31 +42,26 @@ class PostsController extends BaseController
     {
         $data = $this->request->getPost();
 
-        $validation = \Config\Services::validation();
-        $validation->setRules([
-            'title'   => 'required|min_length[3]',
-            'content' => 'required|min_length[10]'
-        ]);
-
-        if (!$validation->run($data)) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        // Verifica se o usuário está logado
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/login');
         }
 
+        // Prepara os dados (sem slug — será gerado no model)
         $insertData = [
-            'title'        => $data['title'],
-            'slug'         => url_title($data['title'], '-', true),
-            'html_content' => $data['content'],
-            'status'       => 'draft',
-            'created_at'   => date('Y-m-d H:i:s')
+            'title'        => $data['title'] ?? '',
+            'html_content' => $data['html_content'] ?? '',
+            'status'       => 'published',
+            'author_id'    => $userId
         ];
 
-        $insertedId = $this->postModel->insert($insertData);
-
-        if (!$insertedId) {
-            return redirect()->back()->withInput()->with('errors', $this->postModel->errors() ?: ['Erro ao salvar o post']);
+        // Tenta salvar
+        if ($this->postModel->insert($insertData)) {
+            return redirect()->to('/blog')->with('success', 'Post criado com sucesso!');
         }
 
-        return redirect()->to('/admin/posts')->with('success', 'Post criado com sucesso!');
+        return redirect()->back()->withInput()->with('errors', $this->postModel->errors());
     }
 
     /**
