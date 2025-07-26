@@ -14,6 +14,13 @@
         margin: 1rem 0;
     }
 
+    .post-content {
+        /* Preserva espaços, tabs e quebras de linha do conteúdo */
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: inherit;
+    }
+
     .sticky-back {
         position: fixed;
         bottom: 30px;
