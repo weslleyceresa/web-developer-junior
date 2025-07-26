@@ -8,14 +8,14 @@
     object-fit: cover;
     border-radius: 50%;
     border: 3px solid #e9ecef;
-    box-shadow: 0 0 0.5rem rgba(0,0,0,0.05);
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.05);
   }
 
   .profile-card {
     background-color: #ffffff;
     border-radius: 1rem;
     padding: 2rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
   }
 
   .post-card {
@@ -33,6 +33,19 @@
   }
 </style>
 
+<?php if (session()->getFlashdata('success')): ?>
+  <div class="alert alert-success">
+    <?= session()->getFlashdata('success') ?>
+  </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+  <div class="alert alert-danger">
+    <?= session()->getFlashdata('error') ?>
+  </div>
+<?php endif; ?>
+
+
 <div class="container mt-4">
   <!-- Cabeçalho do perfil -->
   <div class="d-flex justify-content-between align-items-center mb-4">
@@ -46,7 +59,7 @@
   <div class="profile-card mb-5">
     <div class="d-flex align-items-center">
       <img src="<?= base_url($user['avatar_path'] ?: 'uploads/avatars/default-avatar.png') ?>" alt="Avatar"
-           class="avatar-lg me-4">
+        class="avatar-lg me-4">
       <div>
         <h4 class="mb-1"><?= esc($user['name']) ?> <small class="text-muted">@<?= esc($user['username']) ?></small></h4>
         <p class="text-muted mb-0"><?= esc($user['bio']) ?: 'Sem biografia disponível.' ?></p>
@@ -66,10 +79,21 @@
       <div class="card post-card mb-3 shadow-sm">
         <div class="card-body">
           <h5 class="card-title"><?= esc($post['title']) ?></h5>
-          <p class="text-muted mb-2"><i class="bi bi-clock me-1"></i><?= date('d/m/Y H:i', strtotime($post['created_at'])) ?></p>
-          <a href="/blog/<?= esc($post['slug']) ?>" class="btn btn-sm btn-outline-primary">
+          <p class="text-muted mb-2">
+            <i class="bi bi-clock me-1"></i><?= date('d/m/Y H:i', strtotime($post['created_at'])) ?>
+          </p>
+          <a href="/blog/<?= esc($post['slug']) ?>" class="btn btn-sm btn-outline-primary me-2">
             <i class="bi bi-eye me-1"></i> Ver post
           </a>
+
+          <!-- Botão de excluir -->
+          <form action="/user/posts/delete/<?= $post['id'] ?>" method="post" class="d-inline"
+            onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
+            <?= csrf_field() ?>
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash me-1"></i> Excluir
+            </button>
+          </form>
         </div>
       </div>
     <?php endforeach ?>

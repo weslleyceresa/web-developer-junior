@@ -23,7 +23,9 @@ $routes->get('/blog/(:segment)', 'BlogController::show/$1');
 $routes->get('/user/profile', 'UserController::profile');
 $routes->get('/user/edit', 'UserController::edit');
 $routes->post('/user/update', 'UserController::update');
+$routes->post('/user/posts/delete/(:num)', 'PostsController::deleteFromProfile/$1');
 $routes->get('/user/(:segment)', 'UserController::publicProfile/$1');
+
 
 $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->get('dashboard', 'AdminController::dashboard');

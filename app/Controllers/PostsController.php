@@ -137,6 +137,29 @@ class PostsController extends BaseController
         return redirect()->to('/admin/posts')->with('success', 'Post excluído com sucesso!');
     }
 
+    public function deleteFromProfile($id)
+    {
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/login');
+        }
+
+        $post = $this->postModel->find($id);
+
+        if (!$post) {
+            return redirect()->back()->with('error', 'Post não encontrado.');
+        }
+
+        if ($post['author_id'] !== $userId) {
+            return redirect()->back()->with('error', 'Você não tem permissão para excluir este post.');
+        }
+
+        $this->postModel->delete($id);
+
+        return redirect()->to('/user/profile')->with('success', 'Post excluído com sucesso!');
+    }
+
+
     private function generateUniqueSlug(string $slugBase): string
     {
         $slug = $slugBase;
