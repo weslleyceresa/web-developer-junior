@@ -26,6 +26,7 @@ $routes->post('/user/update', 'UserController::update');
 $routes->get('/user/(:segment)', 'UserController::publicProfile/$1');
 
 $routes->group('admin', function ($routes) {
+    $routes->get('dashboard', 'AdminController::dashboard');
     $routes->get('posts', 'PostsController::index');
     $routes->get('posts/new', 'PostsController::new');
     $routes->post('posts/create', 'PostsController::store');

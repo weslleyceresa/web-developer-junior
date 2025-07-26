@@ -44,7 +44,7 @@ class AuthController extends BaseController
 
         // Redirecionamento com base na role
         if ($user['role'] === 'admin') {
-            return redirect()->to('/admin/posts');
+            return redirect()->to('/admin/dashboard');
         }
 
         return redirect()->to('/blog');
