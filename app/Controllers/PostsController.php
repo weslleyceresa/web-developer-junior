@@ -17,8 +17,25 @@ class PostsController extends BaseController
 
     public function index()
     {
-        $posts = $this->postModel->findAll();
-        return view('admin/posts_list', ['posts' => $posts]);
+        $search = $this->request->getGet('search');
+
+        $builder = $this->postModel
+            ->select('posts.*, users.name AS author_name, users.username AS author_username, users.avatar_path')
+            ->join('users', 'users.id = posts.author_id', 'left');
+
+        if ($search) {
+            $builder->groupStart()
+                ->like('posts.title', $search)
+                ->orLike('users.name', $search)
+                ->groupEnd();
+        }
+
+        $posts = $builder->orderBy('posts.created_at', 'DESC')->findAll();
+
+        return view('admin/posts_list', [
+            'posts' => $posts,
+            'search' => $search
+        ]);
     }
 
     public function new()
