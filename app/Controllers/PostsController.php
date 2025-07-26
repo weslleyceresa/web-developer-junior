@@ -107,6 +107,19 @@ class PostsController extends BaseController
         return redirect()->to('/admin/posts')->with('success', 'Post atualizado com sucesso!');
     }
 
+    public function delete($id)
+    {
+        $post = $this->postModel->find($id);
+
+        if (!$post) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Post não encontrado.");
+        }
+
+        $this->postModel->delete($id);
+
+        return redirect()->to('/admin/posts')->with('success', 'Post excluído com sucesso!');
+    }
+
     private function generateUniqueSlug(string $slugBase): string
     {
         $slug = $slugBase;

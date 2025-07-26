@@ -16,7 +16,7 @@ class AdminController extends BaseController
         $activeUsers = $userModel->where('status', 'active')->countAllResults();
         $totalPosts = $postModel->countAll();
 
-        $recentPosts = $postModel->orderBy('created_at', 'DESC')->findAll(5);
+        $recentPosts = $postModel->getPaginatedWithAuthors(5, 0);
         $recentUsers = $userModel->orderBy('created_at', 'DESC')->findAll(5);
 
         return view('admin/dashboard', [
