@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($title ?? 'Cadastro') ?></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
+
 <body class="bg-light d-flex align-items-center" style="height: 100vh;">
 
   <div class="container">
@@ -63,6 +66,14 @@
 
           </div>
         </div>
+
+        <!-- Botão fora do card -->
+        <div class="text-center mt-3">
+          <a href="/" class="btn btn-link text-decoration-none">
+            <i class="bi bi-house-door-fill me-1"></i> Voltar à página inicial
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
@@ -70,8 +81,8 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    $(function () {
-      $('#registerForm').on('submit', function (e) {
+    $(function() {
+      $('#registerForm').on('submit', function(e) {
         if (!this.checkValidity()) {
           e.preventDefault();
           e.stopPropagation();
@@ -88,4 +99,5 @@
     });
   </script>
 </body>
+
 </html>
