@@ -16,8 +16,9 @@ $routes->get('/blog/load-more', 'BlogController::loadMore');
 $routes->get('/blog/create', 'BlogController::create');
 $routes->post('/blog/save-draft', 'BlogController::saveDraft');
 $routes->post('/blog/create', 'PostsController::store');
-$routes->get('/blog/(:segment)', 'BlogController::show/$1');
 $routes->get('/blog/search', 'BlogController::search');
+$routes->get('/blog/(:segment)', 'BlogController::show/$1');
+
 
 $routes->get('/user/profile', 'UserController::profile');
 $routes->get('/user/edit', 'UserController::edit');

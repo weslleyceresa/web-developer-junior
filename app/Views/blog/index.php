@@ -58,8 +58,9 @@
                             <input type="text" class="form-control" name="q"
                                 placeholder="Buscar publicações..."
                                 value="<?= esc($searchQuery ?? '') ?>">
-                            <button class="btn btn-primary" type="submit">
+                            <button class="btn btn-primary" type="submit" title="Buscar">
                                 <i class="bi bi-search"></i>
+                                <span class="visually-hidden">Buscar</span>
                             </button>
                         </div>
                     </form>
@@ -76,7 +77,7 @@
                         Resultados para: <strong><?= esc($searchQuery) ?></strong>
                     </div>
                 <?php endif; ?>
-                
+
                 <div id="postsContainer">
                     <?= view('blog/_posts', ['posts' => $initialPosts]) ?>
                 </div>
