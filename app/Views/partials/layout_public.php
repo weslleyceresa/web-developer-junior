@@ -5,11 +5,10 @@
   <meta charset="UTF-8">
   <title><?= esc($title ?? 'Blog PME') ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    html,
-    body {
+    html, body {
       height: 100%;
       margin: 0;
       background-color: #fff;
@@ -24,39 +23,42 @@
     }
 
     .navbar {
-      background-color: #fff;
-      border-bottom: 1px solid #eee;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
     }
 
     .navbar-brand {
-      font-weight: bold;
-      color: #f47c20 !important;
+      font-weight: 700;
+      color: #0d6efd !important;
+      letter-spacing: 0.5px;
     }
 
     .nav-link {
-      color: #555 !important;
+      color: #444 !important;
     }
 
     .nav-link:hover {
-      color: #f47c20 !important;
+      color: #0d6efd !important;
     }
 
     .btn-primary {
-      background-color: #f47c20;
-      border-color: #f47c20;
+      background-color: #0d6efd;
+      border-color: #0d6efd;
     }
 
     .btn-primary:hover {
-      background-color: #e46c0f;
-      border-color: #e46c0f;
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
     }
 
     footer {
       padding: 20px 0;
-      background-color: #f9f9f9;
-      border-top: 1px solid #eee;
+      background-color: #f8f9fa;
+      border-top: 1px solid #eaeaea;
       text-align: center;
-      color: #888;
+      color: #6c757d;
+      font-size: 0.875rem;
     }
   </style>
 </head>

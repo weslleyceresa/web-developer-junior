@@ -1,29 +1,63 @@
 <?= $this->extend('partials/layout_public') ?>
 <?= $this->section('content') ?>
 
-<div class="container d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 70vh;">
-  <h1 class="display-5 fw-bold text-orange mb-3">Bem-vindo ao Blog PME</h1>
-  <p class="lead mb-4 text-muted">O seu portal de informação sobre pequenas e médias empresas de Presidente Prudente.</p>
+<style>
+  .text-primary-custom {
+    color: #0d6efd;
+  }
 
-  <div class="mt-3">
-    <p class="fs-6 text-secondary">
+  .text-primary-custom:hover {
+    color: #0b5ed7;
+  }
+
+  .hero-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #0d6efd;
+  }
+
+  .hero-subtitle {
+    color: #6c757d;
+    font-size: 1.125rem;
+  }
+
+  .hero-links a {
+    font-weight: 500;
+    color: #0d6efd;
+    text-decoration: none;
+  }
+
+  .hero-links a:hover {
+    color: #0b5ed7;
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container hero-section">
+  <h1 class="hero-title mb-3">Bem-vindo ao <span class="text-primary">Blog PME</span></h1>
+  <p class="hero-subtitle mb-4">
+    Seu portal de informação sobre pequenas e médias empresas de Presidente Prudente.
+  </p>
+
+  <div class="hero-links">
+    <p class="mb-2">
       Já possui uma conta?
-      <a href="/login" class="text-orange fw-semibold text-decoration-none">Clique aqui para entrar</a>.
+      <a href="/login">Clique aqui para entrar</a>.
     </p>
-    <p class="fs-6 text-secondary">
+    <p>
       Ainda não tem cadastro?
-      <a href="/register" class="text-orange fw-semibold text-decoration-none">Crie sua conta agora mesmo!</a>
+      <a href="/register">Crie sua conta agora mesmo!</a>
     </p>
   </div>
 </div>
-
-<style>
-  .text-orange {
-    color: #f47c20;
-  }
-  .text-orange:hover {
-    color: #e46c0f;
-  }
-</style>
 
 <?= $this->endSection() ?>

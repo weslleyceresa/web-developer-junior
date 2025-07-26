@@ -60,7 +60,8 @@ class PostsController extends BaseController
         $htmlContent = $this->request->getPost('html_content');
         $authorId = session()->get('user_id');
 
-        $slugBase = url_title($title, '-', true);
+        helper('text');
+        $slugBase = url_title(convert_accented_characters($this->removeEmojis($title)), '-', true);
         $slug = $this->generateUniqueSlug($slugBase);
 
         $postData = [
@@ -171,5 +172,11 @@ class PostsController extends BaseController
         }
 
         return $slug;
+    }
+
+    private function removeEmojis(string $text): string
+    {
+        // Remove emojis usando regex Unicode
+        return preg_replace('/[\x{1F600}-\x{1F6FF}|\x{1F300}-\x{1F5FF}|\x{1F1E0}-\x{1F1FF}|\x{2600}-\x{26FF}|\x{2700}-\x{27BF}]/u', '', $text);
     }
 }
