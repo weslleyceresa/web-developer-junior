@@ -64,7 +64,7 @@ class PostModel extends Model
             ->findAll($limit, $offset);
     }
 
-    public function searchPosts(string $query)
+    public function searchPosts(string $query, int $limit = 10): array
     {
         return $this->select('posts.*, users.name as author_name, users.username as author_username, users.avatar_path')
             ->join('users', 'users.id = posts.author_id')
@@ -75,6 +75,6 @@ class PostModel extends Model
             ->orLike('users.name', $query)
             ->groupEnd()
             ->orderBy('posts.created_at', 'DESC')
-            ->findAll();
+            ->findAll($limit);
     }
 }

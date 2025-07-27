@@ -24,7 +24,14 @@
                 </h5>
 
                 <p class="card-text text-secondary mb-3" style="min-height: 3.6em; /* 2 lines approx */">
-                    <?= esc(character_limiter(strip_tags($post['html_content']), 150)) ?>
+                    <?php
+                    $content = strip_tags($post['html_content']);
+                    // character_limiter, fixar para não cometer o mesmo erro.
+                    if (mb_strlen($content) > 150) {
+                        $content = mb_substr($content, 0, 147) . '...';
+                    }
+                    echo esc($content);
+                    ?>
                 </p>
 
                 <a href="/blog/<?= esc($post['slug']) ?>" class="btn btn-sm btn-outline-primary" aria-label="Ler a publicação <?= esc($post['title']) ?>">

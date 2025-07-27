@@ -9,10 +9,11 @@
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid #0d6efd;
-        box-shadow: 0 0 10px rgba(13,110,253,0.4);
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.4);
         transition: transform 0.3s ease;
         cursor: pointer;
     }
+
     .user-avatar:hover {
         transform: scale(1.1);
     }
@@ -26,12 +27,13 @@
     /* Cards de posts */
     .post-card {
         border: none;
-        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.1);
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .1);
         transition: box-shadow 0.3s ease;
         cursor: pointer;
     }
+
     .post-card:hover {
-        box-shadow: 0 0.5rem 1rem rgba(13,110,253,.15);
+        box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, .15);
     }
 
     /* Botão na sidebar */
@@ -40,6 +42,7 @@
         font-size: 1rem;
         transition: background-color 0.3s ease;
     }
+
     .btn-write:hover {
         background-color: #0b5ed7;
     }
@@ -51,6 +54,7 @@
         text-decoration: none;
         padding: 0;
     }
+
     .preferences-list button:hover {
         text-decoration: underline;
         color: #0a58ca;
@@ -60,16 +64,24 @@
     /* Form de busca */
     form input.form-control:focus {
         border-color: #0d6efd;
-        box-shadow: 0 0 8px rgba(13,110,253,.4);
+        box-shadow: 0 0 8px rgba(13, 110, 253, .4);
     }
 
     /* Conteúdo dinâmico */
-    #dynamicContent > .card {
+    #dynamicContent>.card {
         animation: fadeIn 0.4s ease forwards;
     }
+
     @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(10px);}
-        to {opacity: 1; transform: translateY(0);}
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
@@ -109,7 +121,16 @@
                             <?php foreach ($drafts as $i => $draft): ?>
                                 <li class="list-group-item">
                                     <strong><?= esc($draft['title'] ?: '(Sem título)') ?></strong>
-                                    <span class="text-muted d-block mt-1"><?= word_limiter(strip_tags($draft['content']), 10) ?></span>
+                                    <span class="text-muted d-block mt-1">
+                                        <?php
+                                        $content = strip_tags($draft['content'] ?? '');
+                                        // word_limiter.
+                                        $words = explode(' ', $content);
+                                        $limited = implode(' ', array_slice($words, 0, 10));
+                                        if (count($words) > 10) $limited .= '...';
+                                        echo esc($limited);
+                                        ?>
+                                    </span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
