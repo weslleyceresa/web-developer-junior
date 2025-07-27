@@ -66,7 +66,7 @@ class PostModel extends Model
 
     public function searchPosts(string $query)
     {
-        return $this->select('posts.*, users.name as author_name')
+        return $this->select('posts.*, users.name as author_name, users.username as author_username, users.avatar_path')
             ->join('users', 'users.id = posts.author_id')
             ->where('posts.status', 'published')
             ->groupStart()
