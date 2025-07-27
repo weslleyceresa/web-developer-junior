@@ -1,68 +1,112 @@
-# CodeIgniter 4 Application Starter
+# Blog PME
+Blog PME é um projeto monolítico de blog desenvolvido como parte de um desafio técnico para a vaga de Desenvolvedor Web Júnior. Ele permite que pequenas e médias empresas publiquem e gerenciem conteúdos de forma simples e eficiente.
 
-## What is CodeIgniter?
+## 📋 Descrição do Desafio
+O projeto se baseia no seguinte enunciado:
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Atividade 1: Criar um gerenciador de posts com login.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Atividade 2: Criar a área pública do blog, com:
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Listagem de posts com campo de busca;
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+Página de detalhes para cada post.
 
-## Installation & updates
+## 🚀 Tecnologias Utilizadas
+CodeIgniter 4 — Framework PHP
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+Eloquent ORM — ORM para modelagem de dados
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Bootstrap 5 — Template frontend responsivo
 
-## Setup
+jQuery — Manipulação de DOM e interações
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+MySQL 8 — Banco de dados relacional
 
-## Important Change with index.php
+Docker + Docker Compose — Ambiente de desenvolvimento isolado
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+PHPMyAdmin — Interface de gerenciamento do banco
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Git para versionamento
 
-**Please** read the user guide for a better explanation of how CI4 works!
+## 📂 Estrutura do Projeto
+```bash
+.
+├── app/                    # Diretório principal do CodeIgniter (MVC)
+│   ├── Commands/           # Comandos personalizados do CLI (ex: criação de tabelas)
+│   ├── Controllers/        # Lógica dos endpoints e rotas
+│   ├── Models/             # Modelos Eloquent
+│   ├── Views/              # Arquivos de interface (admin, auth, blog)
+├── public/                 # Raiz pública do servidor (document root)
+├── docker-compose.yml      # Arquivo de orquestração Docker
+├── .docker/                # Configuração do Docker (Dockerfile, Apache)
+├── .env                    # Configurações do ambiente
+├── README.md               # Este arquivo
+```
+## ⚙️ Configuração do Ambiente
+### Pré-requisitos
+- Docker
 
-## Repository Management
+- Docker Compose
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Instruções
+Clone o repositório:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+```bash
+git clone https://github.com/seu-usuario/conecta-pme-blog.git
+cd conecta-pme-blog
+```
+### Suba os containers:
 
-## Server Requirements
+```bash
+docker-compose up -d
+```
+## Acesse a aplicação:
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+- Blog/Admin: http://localhost:8080
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- PHPMyAdmin: http://localhost:8081
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+- Host: db
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+- Usuário: root
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+- Senha: root
+
+### Crie as tabelas:
+
+```bash
+docker exec -it conecta-pme-blog-web-1 php spark db:createTables
+```
+
+## 👤 Área Administrativa
+- Login protegido por autenticação
+
+- Cadastro, edição e exclusão de posts
+
+- Upload de imagem para o post
+
+- Campo de descrição com suporte a HTML
+
+## 📰 Área Pública do Blog
+- Listagem de posts com campo de busca
+
+- Visualização individual de cada post
+
+- Slug amigável na URL
+
+## 📸 Exemplo de Dados (Posts)
+- title: Nome do post
+
+- image_path: Caminho da imagem no diretório /public/uploads
+
+- html_content: Corpo do post com HTML
+
+## 📌 Observações
+- Projeto monolítico: sem separação entre frontend e backend
+
+- Ambiente preparado para desenvolvimento local com persistência de dados via volumes Docker
+
+## 🗂️ Diagrama do Banco de Dados
+
+![Diagrama do banco de dados](diagram/blog.png)
