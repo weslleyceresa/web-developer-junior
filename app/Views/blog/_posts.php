@@ -6,6 +6,11 @@
     <?php foreach ($posts as $post) : ?>
         <div class="card mb-4 shadow-sm post-card" tabindex="0" role="article" aria-labelledby="post-title-<?= esc($post['slug']) ?>">
             <div class="card-body">
+                <?php if (!empty($post['image_path'])): ?>
+                    <img src="<?= base_url($post['image_path']) ?>"
+                        class="img-fluid mb-3 rounded"
+                        alt="Imagem de capa de <?= esc($post['title']) ?>">
+                <?php endif; ?>
                 <div class="d-flex align-items-center mb-3">
                     <a href="/user/<?= esc($post['author_username']) ?>" class="d-flex align-items-center text-decoration-none" aria-label="Ver perfil de <?= esc($post['author_name']) ?>">
                         <img src="<?= base_url($post['avatar_path'] ?? 'uploads/avatars/default-avatar.png') ?>"

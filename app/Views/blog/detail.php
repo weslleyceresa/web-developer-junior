@@ -54,6 +54,10 @@
                 <div class="card-body p-4">
                     <h1 class="mb-4"><?= esc($post['title']) ?></h1>
 
+                    <?php if (!empty($post['image_path'])): ?>
+                        <img src="<?= base_url($post['image_path']) ?>" class="img-fluid mb-4 rounded" alt="Imagem de capa do post">
+                    <?php endif; ?>
+
                     <!-- Conteúdo do post -->
                     <div class="post-content fs-5 lh-lg">
                         <?= $post['html_content'] ?>
@@ -86,7 +90,7 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.card').hide().fadeIn(500);
     });
 </script>

@@ -57,6 +57,21 @@ class PostsController extends BaseController
         $this->requireLogin();
 
         $postData = $this->preparePostData();
+
+        // Trata o upload da imagem
+        $image = $this->request->getFile('post_image');
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            $newName = $image->getRandomName();
+            $uploadPath = FCPATH . 'uploads/posts';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+                file_put_contents($uploadPath . '/index.html', '');
+            }
+
+            $image->move($uploadPath, $newName);
+            $postData['image_path'] = 'uploads/posts/' . $newName;
+        }
+
         $validation = $this->validatePost($postData);
 
         if (!$validation['is_valid']) {
@@ -69,7 +84,6 @@ class PostsController extends BaseController
 
         return redirect()->to(self::REDIRECT_BLOG)->with('success', 'Post criado com sucesso!');
     }
-
     /**
      * Exibe o formulário de edição de post
      * 
@@ -154,7 +168,7 @@ class PostsController extends BaseController
     {
         $title = $this->request->getPost('title');
         $slugBase = url_title(convert_accented_characters($this->removeEmojis($title)), '-', true);
-        
+
         return [
             'title'        => $title,
             'slug'         => $this->generateUniqueSlug($slugBase),

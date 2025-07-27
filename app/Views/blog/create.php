@@ -3,15 +3,25 @@
 
 <div class="container mt-4">
     <h3 class="mb-3">Nova Publicação</h3>
-    <!-- Correção 1: Alterar action para nova rota e adicionar CSRF -->
-    <form id="postForm" method="POST" action="/blog/create">
+    <form id="postForm" method="POST" action="/blog/create" enctype="multipart/form-data">
         <?= csrf_field() ?>
+
+        <!-- Título -->
         <div class="mb-3">
             <input type="text" class="form-control" name="title" id="postTitle" placeholder="Título da publicação" required>
         </div>
+
+        <!-- Conteúdo -->
         <div class="mb-3">
             <textarea class="form-control" name="html_content" id="postContent" rows="8" placeholder="Escreva aqui..." required></textarea>
         </div>
+
+        <!-- Upload da imagem -->
+        <div class="mb-3">
+            <label for="postImage" class="form-label">Imagem de capa (opcional)</label>
+            <input class="form-control" type="file" name="post_image" id="postImage" accept="image/*">
+        </div>
+
         <button type="submit" class="btn btn-success">Publicar</button>
         <button type="button" id="saveDraft" class="btn btn-secondary ms-2">Salvar como rascunho</button>
         <a href="/blog" class="btn btn-link ms-3" id="backToFeed">Voltar para o feed</a>
@@ -33,13 +43,11 @@
             $(this).addClass('was-validated');
             return;
         }
-        
-        // Permite o envio tradicional do formulário
+
         isDirty = false;
     });
 
     $('#saveDraft').click(function() {
-        // Correção 3: Adicionar CSRF no rascunho
         $.post('/blog/save-draft', {
             title: $('#postTitle').val(),
             html_content: $('#postContent').val(),
